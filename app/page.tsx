@@ -33,7 +33,8 @@ export default function HomePage() {
             </span>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-4">
+          {/* Launch App button hidden as requested */}
+          {/* <div className="flex items-center gap-2 sm:gap-4">
             <Link
               href="/dashboard"
               className="px-3.5 sm:px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-lg shadow-indigo-600/30 transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5"
@@ -41,7 +42,7 @@ export default function HomePage() {
               <span>Launch App</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
-          </div>
+          </div> */}
         </div>
       </header>
 
