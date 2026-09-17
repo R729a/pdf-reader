@@ -54,6 +54,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
   const [viewMode, setViewMode] = useState<'interactive' | 'iframe'>('interactive');
   const [ttsState, setTtsState] = useState<TTSState>(TTSService.getState());
   const [showAudioStudio, setShowAudioStudio] = useState<boolean>(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState<boolean>(false);
   const [activePdfUrl, setActivePdfUrl] = useState<string | null>(null);
   const [isLoadingPdfBinary, setIsLoadingPdfBinary] = useState<boolean>(false);
   const [manualHighlightWordIndex, setManualHighlightWordIndex] = useState<number | null>(null);
@@ -316,9 +317,9 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
   return (
     <div className="h-full flex flex-col bg-slate-950 text-slate-200 border-r border-slate-800 overflow-hidden select-text">
       {/* Top Toolbar */}
-      <div className="h-12 border-b border-slate-800 bg-slate-900/90 px-3 flex items-center justify-between text-xs gap-2 shrink-0">
+      <div className="border-b border-slate-800 bg-slate-900/95 px-2 sm:px-3 py-1.5 sm:h-12 flex flex-wrap sm:flex-nowrap items-center justify-between text-xs gap-1.5 sm:gap-2 shrink-0">
         {/* Page Navigation */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1 sm:gap-1.5">
           <button
             onClick={handlePrevPage}
             disabled={currentPage <= 1}
@@ -329,8 +330,8 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
             <ChevronLeft className="w-4 h-4" />
           </button>
 
-          <div className="flex items-center gap-1.5 px-2.5 h-8 font-mono text-xs text-slate-300 bg-slate-950 rounded-lg border border-slate-800">
-            <span>Page</span>
+          <div className="flex items-center gap-1 px-2 h-8 font-mono text-xs text-slate-300 bg-slate-950 rounded-lg border border-slate-800">
+            <span className="hidden xs:inline text-slate-400">Page</span>
             <input
               type="number"
               min={1}
@@ -340,7 +341,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
                 const val = parseInt(e.target.value);
                 if (val >= 1 && val <= docProp.pageCount) setCurrentPage(val);
               }}
-              className="w-8 text-center bg-transparent focus:outline-none font-semibold text-indigo-400"
+              className="w-7 sm:w-8 text-center bg-transparent focus:outline-none font-semibold text-indigo-400"
               aria-label="Current page number"
             />
             <span className="text-slate-500">/ {docProp.pageCount}</span>
@@ -357,8 +358,8 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
           </button>
         </div>
 
-        {/* Search within document */}
-        <div className="hidden sm:flex items-center gap-1.5 bg-slate-950 border border-slate-800 rounded-lg px-2.5 h-8 max-w-[170px]">
+        {/* Search within document (Desktop) */}
+        <div className="hidden md:flex items-center gap-1.5 bg-slate-950 border border-slate-800 rounded-lg px-2.5 h-8 max-w-[170px]">
           <Search className="w-3.5 h-3.5 text-slate-500 shrink-0" />
           <input
             type="text"
@@ -370,62 +371,46 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
           />
         </div>
 
-        {/* Zoom & View Options */}
-        <div className="flex items-center gap-1.5">
+        {/* Zoom, Mode & TTS Options */}
+        <div className="flex items-center gap-1 sm:gap-1.5">
+          {/* Mobile search toggle button */}
           <button
-            onClick={handleZoomOut}
-            className="btn-icon w-8 h-8"
-            title="Zoom Out"
-            aria-label="Zoom Out"
+            type="button"
+            onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+            className={`btn-icon w-8 h-8 md:hidden ${isMobileSearchOpen ? '!bg-indigo-600/30 !text-indigo-300 !border-indigo-500/40' : ''}`}
+            title="Search text"
+            aria-label="Search text in document"
           >
-            <ZoomOut className="w-3.5 h-3.5" />
-          </button>
-          <button
-            onClick={handleResetZoom}
-            className="h-8 px-2.5 rounded-lg text-xs font-mono text-slate-400 hover:text-slate-200 hover:bg-slate-800/80 transition-colors flex items-center"
-            title="Reset Zoom"
-            aria-label="Reset Zoom to 100%"
-          >
-            {zoom}%
-          </button>
-          <button
-            onClick={handleZoomIn}
-            className="btn-icon w-8 h-8"
-            title="Zoom In"
-            aria-label="Zoom In"
-          >
-            <ZoomIn className="w-3.5 h-3.5" />
+            <Search className="w-3.5 h-3.5" />
           </button>
 
           {/* Segmented View Mode Toggle: Interactive vs Raw PDF */}
-          <div className="h-5 w-px bg-slate-800 mx-1" />
-
           <div 
-            className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs h-8"
+            className="flex items-center bg-slate-950 p-0.5 rounded-xl border border-slate-800 text-xs h-8"
             role="group"
             aria-label="Document View Mode"
           >
             <button
               id="view-mode-interactive-btn"
               onClick={() => setViewMode('interactive')}
-              className={`h-6 px-3 rounded-lg font-medium text-xs transition-all flex items-center ${
+              className={`h-7 px-2 sm:px-3 rounded-lg font-medium text-[11px] sm:text-xs transition-all flex items-center ${
                 viewMode === 'interactive'
                   ? 'bg-indigo-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
-              title="Interactive View: word-by-word TTS highlighting, click any word to read aloud, and scalable text"
+              title="Interactive View: word-by-word TTS highlighting"
             >
               Interactive
             </button>
             <button
               id="view-mode-raw-btn"
               onClick={() => setViewMode('iframe')}
-              className={`h-6 px-3 rounded-lg font-medium text-xs transition-all flex items-center ${
+              className={`h-7 px-2 sm:px-3 rounded-lg font-medium text-[11px] sm:text-xs transition-all flex items-center ${
                 viewMode === 'iframe'
                   ? 'bg-indigo-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
-              title="Raw PDF View: Original PDF formatting, vector fonts, and graphics"
+              title="Raw PDF View"
             >
               Raw PDF
             </button>
@@ -434,7 +419,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
                 href={activePdfUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="h-6 w-6 flex items-center justify-center rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-slate-800 ml-0.5 transition-colors"
+                className="h-7 w-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-slate-800 ml-0.5 transition-colors"
                 title="Open PDF in new tab"
                 aria-label="Open PDF in new tab"
               >
@@ -443,22 +428,86 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
             )}
           </div>
 
-          {/* Top Toolbar Quick Trigger for TTS Narration Studio */}
-          <div className="h-5 w-px bg-slate-800 mx-1 hidden lg:block" />
+          {/* Zoom controls */}
+          <div className="flex items-center gap-0.5">
+            <button
+              onClick={handleZoomOut}
+              className="btn-icon w-8 h-8"
+              title="Zoom Out"
+              aria-label="Zoom Out"
+            >
+              <ZoomOut className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={handleResetZoom}
+              className="h-8 px-1.5 sm:px-2 rounded-lg text-[11px] font-mono text-slate-400 hover:text-slate-200 hover:bg-slate-800/80 transition-colors flex items-center"
+              title="Reset Zoom"
+              aria-label="Reset Zoom to 100%"
+            >
+              {zoom}%
+            </button>
+            <button
+              onClick={handleZoomIn}
+              className="btn-icon w-8 h-8"
+              title="Zoom In"
+              aria-label="Zoom In"
+            >
+              <ZoomIn className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          {/* TTS Narration Studio Quick Trigger */}
           <button
             id="top-narration-studio-btn"
             onClick={() => setShowAudioStudio(!showAudioStudio)}
-            className={`btn-secondary text-xs h-8 px-3 hidden lg:flex items-center gap-1.5 ${
+            className={`btn-secondary text-xs h-8 px-2 sm:px-3 hidden sm:flex items-center gap-1.5 ${
               showAudioStudio ? '!bg-indigo-600/30 !text-indigo-300 !border-indigo-500/50' : ''
             }`}
-            title="Toggle Audiobook Narration Studio (voice, pitch, speed settings)"
+            title="Toggle Audiobook Narration Studio"
             aria-expanded={showAudioStudio}
+            aria-label="Toggle Audiobook Narration Studio"
           >
-            <Headphones className="w-3.5 h-3.5 text-indigo-400" />
-            <span>TTS Narration</span>
+            <Headphones className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+            <span className="hidden md:inline">TTS Narration</span>
           </button>
         </div>
       </div>
+
+      {/* Mobile Expandable Search Bar */}
+      {isMobileSearchOpen && (
+        <div className="md:hidden bg-slate-900 border-b border-slate-800 px-3 py-2 flex items-center gap-2">
+          <div className="flex-1 flex items-center gap-1.5 bg-slate-950 border border-slate-800 rounded-lg px-2.5 h-8">
+            <Search className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+            <input
+              type="text"
+              placeholder="Find text in document..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="bg-transparent text-xs text-slate-200 placeholder-slate-500 focus:outline-none w-full"
+              autoFocus
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="text-slate-500 hover:text-slate-300"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setIsMobileSearchOpen(false);
+              setSearchQuery('');
+            }}
+            className="btn-ghost text-xs px-2 h-8"
+          >
+            Close
+          </button>
+        </div>
+      )}
 
       {/* Main Document Content Canvas / Viewer */}
       <div 
@@ -466,7 +515,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
         tabIndex={0}
         role="region"
         aria-label="Document content viewer"
-        className="flex-1 overflow-y-auto overflow-x-auto p-4 sm:p-6 bg-slate-950 custom-scrollbar focus:outline-none focus:ring-1 focus:ring-indigo-500/40"
+        className="flex-1 overflow-y-auto overflow-x-auto p-2 sm:p-4 md:p-6 bg-slate-950 custom-scrollbar focus:outline-none focus:ring-1 focus:ring-indigo-500/40"
       >
         {viewMode === 'iframe' ? (
           <div className="w-full h-full min-h-[550px] flex flex-col relative rounded-xl overflow-hidden border border-slate-800 shadow-2xl bg-slate-900">
@@ -500,7 +549,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
               style={{
                 zoom: `${zoom}%`,
               }}
-              className="w-full max-w-2xl bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl relative flex flex-col justify-between min-h-[520px] transition-[zoom] duration-150"
+              className="w-full max-w-2xl bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 sm:p-8 shadow-2xl relative flex flex-col justify-between min-h-[380px] sm:min-h-[520px] transition-[zoom] duration-150"
             >
               <div className="flex-1 min-h-0">
                 {/* Page Header */}
@@ -706,39 +755,40 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
       )}
 
       {/* Dedicated Sticky Bottom Bar: Media Player Audiobook Bar */}
-      <div className="h-16 border-t border-slate-800 bg-slate-900/95 px-4 flex items-center justify-between gap-4 shrink-0 shadow-lg">
+      <div className="min-h-[58px] sm:h-16 border-t border-slate-800 bg-slate-900/98 px-2.5 sm:px-4 py-1.5 sm:py-0 flex items-center justify-between gap-2 sm:gap-4 shrink-0 shadow-lg safe-bottom">
         {/* Document & Playback Info */}
-        <div className="flex items-center gap-3 min-w-0 max-w-[260px]">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 max-w-[110px] xs:max-w-[150px] sm:max-w-[240px]">
           <div
-            className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-sm ${
+            className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center shrink-0 shadow-sm ${
               isPlayingThisDoc
                 ? 'bg-indigo-600 text-white animate-pulse-glow'
                 : 'bg-slate-800 text-indigo-400'
             }`}
           >
-            <Headphones className="w-4 h-4" />
+            <Headphones className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </div>
           <div className="min-w-0">
-            <span className="font-semibold text-slate-200 block text-xs truncate">
+            <span className="font-semibold text-slate-200 block text-xs truncate" title={docProp.filename}>
               {docProp.filename}
             </span>
-            <div className="flex items-center gap-2 text-[10px] text-slate-400">
-              <span className="text-indigo-400 font-mono">Page {currentPage} of {docProp.pageCount}</span>
-              <span>•</span>
-              <span className="font-mono">{processedDoc ? `${processedDoc.totalWords} words` : '0 words'}</span>
+            <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
+              <span className="text-indigo-400 font-mono">P.{currentPage}/{docProp.pageCount}</span>
+              <span className="hidden xs:inline">•</span>
+              <span className="hidden xs:inline font-mono">{processedDoc ? `${processedDoc.totalWords}w` : '0w'}</span>
             </div>
           </div>
         </div>
 
         {/* Center: Media Player Controls with Scrubbable Progress Bar */}
-        <div className="flex-1 max-w-xl flex flex-col items-center gap-1">
+        <div className="flex-1 max-w-xl flex flex-col items-center gap-0.5 sm:gap-1 min-w-0">
           {/* Controls: [◀ 10s] [Play/Pause] [Stop] [10s ▶] */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <button
               onClick={() => TTSService.seekBackward(10)}
               disabled={ttsState.totalWords === 0}
-              className="btn-icon"
+              className="btn-icon w-8 h-8 sm:w-8 sm:h-8"
               title="Rewind 10 seconds (Left Arrow)"
+              aria-label="Rewind 10 seconds"
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
@@ -746,10 +796,11 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
             <button
               id="read-entire-pdf-btn"
               onClick={handleReadEntirePDF}
-              className={`btn-primary px-4 py-1.5 ${
+              className={`btn-primary px-3 sm:px-4 py-1.5 min-h-[34px] sm:min-h-[34px] text-xs ${
                 isPlayingThisDoc ? '!bg-amber-600 hover:!bg-amber-500' : ''
               }`}
               title="Extract all text from this PDF and read aloud"
+              aria-label={isPlayingThisDoc ? "Pause speech" : isPausedThisDoc ? "Resume speech" : "Read entire PDF"}
             >
               {isPlayingThisDoc ? (
                 <>
@@ -764,7 +815,8 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
               ) : (
                 <>
                   <Volume2 className="w-3.5 h-3.5" />
-                  <span>Read Entire PDF</span>
+                  <span className="hidden xs:inline">Read Entire PDF</span>
+                  <span className="xs:hidden">Read</span>
                 </>
               )}
             </button>
@@ -772,8 +824,9 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
             <button
               onClick={() => TTSService.seekForward(10)}
               disabled={ttsState.totalWords === 0}
-              className="btn-icon"
+              className="btn-icon w-8 h-8 sm:w-8 sm:h-8"
               title="Forward 10 seconds (Right Arrow)"
+              aria-label="Forward 10 seconds"
             >
               <RotateCw className="w-3.5 h-3.5" />
             </button>
@@ -781,8 +834,9 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
             {ttsState.status !== 'idle' && (
               <button
                 onClick={() => TTSService.stop()}
-                className="btn-icon"
+                className="btn-icon w-8 h-8 sm:w-8 sm:h-8"
                 title="Stop playback"
+                aria-label="Stop playback"
               >
                 <Square className="w-3.5 h-3.5" />
               </button>
@@ -790,8 +844,8 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
           </div>
 
           {/* Progress Slider */}
-          <div className="w-full flex items-center gap-2 text-[10px] font-mono text-slate-400">
-            <span className="w-9 text-right text-indigo-300 font-mono">{formatTime(ttsState.currentTime)}</span>
+          <div className="w-full flex items-center gap-1.5 sm:gap-2 text-[10px] font-mono text-slate-400">
+            <span className="w-8 sm:w-9 text-right text-indigo-300 font-mono text-[9px] sm:text-[10px]">{formatTime(ttsState.currentTime)}</span>
             <label htmlFor="audio-timeline-slider" className="sr-only">
               Seek audio timeline
             </label>
@@ -818,23 +872,24 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
               aria-valuemax={100}
               aria-valuenow={Math.round(ttsState.progressPercent)}
               aria-valuetext={`${Math.round(ttsState.progressPercent)}% played`}
-              className="flex-1 h-6 py-2 bg-transparent appearance-none cursor-pointer accent-indigo-500 disabled:opacity-40 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
-              title="Seek audio position (Use Left/Right arrow keys)"
+              className="flex-1 h-5 sm:h-6 py-1 bg-transparent appearance-none cursor-pointer accent-indigo-500 disabled:opacity-40 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+              title="Seek audio position"
             />
-            <span className="w-9 text-slate-400 font-mono">-{formatTime(Math.max(0, ttsState.totalDuration - ttsState.currentTime))}</span>
+            <span className="w-8 sm:w-9 text-slate-400 font-mono text-[9px] sm:text-[10px]">-{formatTime(Math.max(0, ttsState.totalDuration - ttsState.currentTime))}</span>
           </div>
         </div>
 
         {/* Right: Speed Toggle, Voice & Studio, Progress Badge */}
-        <div className="hidden sm:flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           <button
             onClick={() => {
               const rates = [0.75, 1.0, 1.25, 1.5, 2.0];
               const nextIndex = (rates.indexOf(ttsState.rate) + 1) % rates.length;
               TTSService.setRate(rates[nextIndex === -1 ? 1 : nextIndex]);
             }}
-            className="btn-secondary text-[11px] font-mono px-2 py-1"
+            className="btn-secondary text-[10px] sm:text-[11px] font-mono px-1.5 sm:px-2 py-1 h-8"
             title="Cycle playback speed (0.75x, 1x, 1.25x, 1.5x, 2x)"
+            aria-label={`Playback speed: ${ttsState.rate.toFixed(2)}x`}
           >
             {ttsState.rate.toFixed(2)}x
           </button>
@@ -842,31 +897,33 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
           <button
             id="audio-studio-toggle-btn"
             onClick={() => setShowAudioStudio(!showAudioStudio)}
-            className={`btn-secondary text-xs px-2.5 py-1 ${
+            className={`btn-secondary text-xs px-2 sm:px-2.5 py-1 h-8 ${
               showAudioStudio ? '!bg-indigo-600/30 !text-indigo-300 !border-indigo-500/50' : ''
             }`}
             title="Open Audiobook Narration Studio (Voice, Speed, Pitch)"
+            aria-label="Audiobook Voice Settings"
           >
             <Sliders className="w-3.5 h-3.5 text-indigo-400" />
-            <span className="hidden md:inline">Voice & Studio</span>
+            <span className="hidden lg:inline">Voice</span>
           </button>
 
           {onToggleFloatingPlayer && (
             <button
               id="pop-out-player-btn"
               onClick={onToggleFloatingPlayer}
-              className={`btn-secondary text-xs px-2 py-1 ${
+              className={`btn-secondary text-xs px-2 py-1 h-8 hidden sm:flex ${
                 isFloatingPlayerOpen ? '!bg-indigo-600/30 !text-indigo-300 !border-indigo-500/50' : ''
               }`}
               title={isFloatingPlayerOpen ? "Floating player is open (click to dock)" : "Pop out floating audiobook player widget"}
+              aria-label="Pop out floating player"
             >
               <ExternalLink className="w-3.5 h-3.5 text-indigo-400" />
-              <span className="hidden lg:inline">{isFloatingPlayerOpen ? 'Docked' : 'Pop Out'}</span>
+              <span className="hidden xl:inline">{isFloatingPlayerOpen ? 'Docked' : 'Pop Out'}</span>
             </button>
           )}
 
-          <span className="text-[11px] font-mono font-bold bg-slate-800 text-emerald-400 px-2.5 py-1 rounded-full border border-slate-700">
-            {Math.round(ttsState.progressPercent)}% Complete
+          <span className="hidden sm:inline-block text-[10px] sm:text-[11px] font-mono font-bold bg-slate-800 text-emerald-400 px-2 py-1 rounded-full border border-slate-700">
+            {Math.round(ttsState.progressPercent)}%
           </span>
         </div>
       </div>

@@ -280,18 +280,25 @@ export default function DashboardPage() {
     }
   };
 
+  const [mobileTab, setMobileTab] = useState<'viewer' | 'chat'>('viewer');
+
   const handlePageCitationClick = (pageNumber: number, snippet: string) => {
     setTargetPage(pageNumber);
     setHighlightText(snippet);
+    // On mobile screens, automatically switch to Document Viewer to view citation
+    setMobileTab('viewer');
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-slate-950 overflow-hidden text-slate-100">
+    <div className="h-[100dvh] w-full max-w-[100vw] flex flex-col bg-slate-950 overflow-hidden text-slate-100">
       {/* Navbar Header */}
       <Navbar
         activeDocument={activeDoc}
         documents={documents}
-        onSelectDocument={handleSelectDocument}
+        onSelectDocument={(id) => {
+          handleSelectDocument(id);
+          setIsMobileSidebarOpen(false);
+        }}
         onOpenUploadModal={() => setIsUploadOpen(true)}
         user={user}
         onOpenAuthModal={() => setIsAuthOpen(true)}
@@ -299,18 +306,45 @@ export default function DashboardPage() {
         ollamaStatus={ollamaStatus}
         aiConfigured={aiConfigured}
         aiModel={aiModel}
+        onToggleMobileSidebar={() => setIsMobileSidebarOpen(prev => !prev)}
+        isMobileSidebarOpen={isMobileSidebarOpen}
       />
 
-      {/* Main Workspace Area (Sidebar + Side-by-Side PDF & Chat) */}
-      <div className="flex-1 flex overflow-hidden relative">
-        {/* Mobile Toggle Button */}
+      {/* Mobile-Only Navigation Segmented Switcher */}
+      <div className="md:hidden bg-slate-900/95 border-b border-slate-800 px-3 py-1.5 flex items-center gap-2 shrink-0 z-20">
         <button
-          onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-          className="md:hidden absolute top-3 left-3 z-30 p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300"
+          type="button"
+          onClick={() => setMobileTab('viewer')}
+          aria-label="View PDF Document"
+          className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold transition-all ${
+            mobileTab === 'viewer'
+              ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/20'
+              : 'bg-slate-950/60 text-slate-400 hover:text-slate-200'
+          }`}
         >
-          {isMobileSidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          <FileText className="w-3.5 h-3.5" />
+          <span className="truncate">Document {activeDoc ? `(${activeDoc.pageCount}p)` : ''}</span>
         </button>
+        <button
+          type="button"
+          onClick={() => setMobileTab('chat')}
+          aria-label="View AI Assistant Chat"
+          className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold transition-all relative ${
+            mobileTab === 'chat'
+              ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/20'
+              : 'bg-slate-950/60 text-slate-400 hover:text-slate-200'
+          }`}
+        >
+          <Sparkles className="w-3.5 h-3.5 text-indigo-300" />
+          <span>AI Assistant</span>
+          {messages.length > 1 && (
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse ml-0.5" />
+          )}
+        </button>
+      </div>
 
+      {/* Main Workspace Area (Sidebar Drawer + Workspace) */}
+      <div className="flex-1 flex overflow-hidden relative">
         {/* Sidebar Component */}
         <Sidebar
           documents={documents}
@@ -322,10 +356,10 @@ export default function DashboardPage() {
           onCloseMobile={() => setIsMobileSidebarOpen(false)}
         />
 
-        {/* Side-by-Side Split Workspace View */}
-        <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
+        {/* Side-by-Side Split Workspace View (Desktop) / Fullscreen Tabs (Mobile) */}
+        <main className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
           {/* Left Panel: PDF Interactive Document Viewer */}
-          <section className="flex-1 h-1/2 md:h-full min-w-[320px] overflow-hidden">
+          <section className={`flex-1 h-full min-w-0 overflow-hidden ${mobileTab === 'viewer' ? 'flex flex-col' : 'hidden md:flex md:flex-col'}`}>
             <PDFViewer
               document={activeDoc}
               targetPage={targetPage}
@@ -336,7 +370,7 @@ export default function DashboardPage() {
           </section>
 
           {/* Right Panel: AI Chat Assistant */}
-          <section className="w-full md:w-[480px] lg:w-[540px] xl:w-[600px] h-1/2 md:h-full shrink-0 overflow-hidden">
+          <section className={`w-full md:w-[460px] lg:w-[520px] xl:w-[580px] h-full shrink-0 min-w-0 overflow-hidden ${mobileTab === 'chat' ? 'flex flex-col' : 'hidden md:flex md:flex-col'}`}>
             <ChatWindow
               document={activeDoc}
               messages={messages}

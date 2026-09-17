@@ -155,15 +155,16 @@ export const AudioControls: React.FC<AudioControlsProps> = ({
       <div
         ref={nodeRef}
         style={{ touchAction: 'none' }}
-        className={`fixed bottom-6 right-6 z-50 select-none ${className}`}
+        className={`fixed bottom-20 sm:bottom-6 right-2 sm:right-6 z-50 select-none max-w-[calc(100vw-1rem)] ${className}`}
       >
         {isMinimized ? (
           /* ================= MINIMIZED CAPSULE WIDGET ================= */
-          <div className="bg-slate-900/95 border border-slate-700/90 backdrop-blur-xl rounded-full shadow-2xl p-2 px-3 flex items-center gap-2.5 text-slate-100 hover:border-indigo-500/50 transition-all duration-200">
+          <div className="max-w-[calc(100vw-1.25rem)] bg-slate-900/95 border border-slate-700/90 backdrop-blur-xl rounded-full shadow-2xl p-1.5 sm:p-2 px-2.5 sm:px-3 flex items-center gap-1.5 sm:gap-2.5 text-slate-100 hover:border-indigo-500/50 transition-all duration-200">
             {/* Drag Handle */}
             <div
               className="drag-handle cursor-grab active:cursor-grabbing p-1 text-slate-400 hover:text-slate-200"
               title="Drag widget"
+              aria-label="Drag audio widget"
             >
               <GripVertical className="w-4 h-4" />
             </div>
@@ -268,7 +269,7 @@ export const AudioControls: React.FC<AudioControlsProps> = ({
           </div>
         ) : (
           /* ================= MAXIMIZED AUDIOBOOK PLAYER WIDGET ================= */
-          <div className="w-[410px] max-w-[calc(100vw-2rem)] bg-slate-900/95 border border-slate-700/90 backdrop-blur-xl rounded-2xl shadow-2xl p-4 text-slate-100 transition-all duration-200">
+          <div className="w-[390px] max-w-[calc(100vw-1.25rem)] bg-slate-900/95 border border-slate-700/90 backdrop-blur-xl rounded-2xl shadow-2xl p-3 sm:p-4 text-slate-100 transition-all duration-200">
             {/* Draggable Header Bar */}
             <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
               <div className="drag-handle cursor-grab active:cursor-grabbing flex items-center gap-2 flex-1 min-w-0 py-1">

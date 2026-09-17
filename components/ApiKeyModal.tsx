@@ -77,30 +77,32 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
       <div 
-        className="w-full max-w-md bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-150 text-slate-100"
+        className="w-full max-w-md bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-150 text-slate-100 max-h-[92dvh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
+        <div className="px-4 sm:px-5 py-3.5 sm:py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/90 shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/30">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/30 shrink-0">
               <Key className="w-4 h-4" />
             </div>
             <div>
               <h3 className="font-bold text-sm text-white">Google Gemini API Setup</h3>
-              <p className="text-[11px] text-slate-400">Unlock ChatGPT-like generative responses</p>
+              <p className="text-[11px] text-slate-400">Unlock generative document responses</p>
             </div>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
+            aria-label="Close API Key modal"
+            className="btn-icon w-8 h-8 text-slate-400 hover:text-slate-200"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Body Form */}
-        <form onSubmit={handleSave} className="p-5 space-y-4">
+        <form onSubmit={handleSave} className="p-4 sm:p-5 space-y-4 overflow-y-auto custom-scrollbar">
           {/* Info Banner with Direct Link to Google AI Studio */}
           <div className="p-3 rounded-xl bg-indigo-950/40 border border-indigo-800/50 text-xs text-indigo-200 flex flex-col gap-1.5">
             <div className="flex items-center gap-2 font-semibold text-indigo-300">

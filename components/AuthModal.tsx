@@ -64,10 +64,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl max-w-md w-full relative animate-in fade-in zoom-in-95 duration-150 text-slate-100">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-2xl max-w-md w-full relative animate-in fade-in zoom-in-95 duration-150 text-slate-100 max-h-[92dvh] overflow-y-auto custom-scrollbar">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-800 transition-colors"
+          aria-label="Close authentication modal"
+          className="btn-icon w-8 h-8 absolute top-3 right-3 text-slate-400 hover:text-slate-200"
         >
           <X className="w-4 h-4" />
         </button>

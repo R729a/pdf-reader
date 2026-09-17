@@ -9,7 +9,8 @@ import {
   Search, 
   BookOpen, 
   HardDrive,
-  AlertTriangle
+  AlertTriangle,
+  X
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -53,20 +54,47 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <>
+      {/* Mobile Drawer Backdrop Overlay */}
+      {isOpen && (
+        <div
+          role="button"
+          tabIndex={0}
+          aria-label="Close documents drawer overlay"
+          onClick={onCloseMobile}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape' || e.key === 'Enter') onCloseMobile();
+          }}
+          className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-40 md:hidden transition-opacity"
+        />
+      )}
+
       <aside
-        className={`fixed inset-y-0 left-0 z-30 w-72 bg-slate-900 border-r border-slate-800 flex flex-col transition-transform duration-200 ease-in-out md:static md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 sm:w-80 max-w-[85vw] bg-slate-900 border-r border-slate-800 flex flex-col transition-transform duration-300 ease-in-out md:static md:translate-x-0 shadow-2xl md:shadow-none ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Sidebar Header */}
-        <div className="p-4 border-b border-slate-800 flex flex-col gap-3">
+        <div className="p-3.5 sm:p-4 border-b border-slate-800 flex flex-col gap-3">
+          {/* Mobile-only Header Bar with Close Button */}
+          <div className="flex items-center justify-between md:hidden pb-1 border-b border-slate-800/60">
+            <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">Document Library</span>
+            <button
+              type="button"
+              onClick={onCloseMobile}
+              aria-label="Close sidebar"
+              className="btn-icon w-8 h-8 text-slate-400 hover:text-white"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
           <button
             id="sidebar-upload-btn"
             onClick={() => {
               onOpenUploadModal();
               onCloseMobile();
             }}
-            className="btn-primary w-full py-2.5"
+            className="btn-primary w-full py-2.5 min-h-[42px]"
           >
             <Plus className="w-4 h-4" />
             <span>Upload PDF</span>

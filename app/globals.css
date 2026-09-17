@@ -8,32 +8,40 @@
   }
 }
 
-/* Standardized Accessible Button Design System (Min 32px hit target) */
+/* Standardized Accessible Button Design System (Min 40-44px hit target on mobile) */
 @layer components {
   /* 1. Primary: Main Call-To-Action */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 min-h-[32px] rounded-xl bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] text-white text-xs font-semibold shadow-sm transition-all duration-150 disabled:opacity-40 disabled:pointer-events-none cursor-pointer;
+    @apply inline-flex items-center justify-center gap-1.5 px-3.5 py-2 min-h-[40px] sm:min-h-[34px] rounded-xl bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] text-white text-xs font-semibold shadow-sm transition-all duration-150 disabled:opacity-40 disabled:pointer-events-none cursor-pointer select-none;
   }
 
   /* 2. Secondary: Standard actions, filters, speed toggles */
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-1.5 px-3 py-1.5 min-h-[32px] rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-[0.98] text-slate-200 border border-slate-700/80 text-xs font-medium transition-all duration-150 disabled:opacity-40 disabled:pointer-events-none cursor-pointer;
+    @apply inline-flex items-center justify-center gap-1.5 px-3 py-2 min-h-[40px] sm:min-h-[34px] rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-[0.98] text-slate-200 border border-slate-700/80 text-xs font-medium transition-all duration-150 disabled:opacity-40 disabled:pointer-events-none cursor-pointer select-none;
   }
 
   /* 3. Icon: Compact controls (Navigation, playback, utility icons) */
   .btn-icon {
-    @apply inline-flex items-center justify-center min-w-[32px] min-h-[32px] p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 active:scale-[0.98] text-slate-400 hover:text-slate-100 border border-slate-700/80 text-xs transition-colors duration-150 disabled:opacity-40 disabled:pointer-events-none cursor-pointer;
+    @apply inline-flex items-center justify-center min-w-[40px] min-h-[40px] sm:min-w-[34px] sm:min-h-[34px] p-2 sm:p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 active:scale-[0.98] text-slate-400 hover:text-slate-100 border border-slate-700/80 text-xs transition-colors duration-150 disabled:opacity-40 disabled:pointer-events-none cursor-pointer select-none;
   }
 
   /* 4. Ghost: Borderless subtle text or inline actions */
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-1 px-2.5 py-1.5 min-h-[32px] rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 active:scale-[0.98] text-xs font-medium transition-colors duration-150 disabled:opacity-40 disabled:pointer-events-none cursor-pointer;
+    @apply inline-flex items-center justify-center gap-1 px-2.5 py-2 min-h-[40px] sm:min-h-[34px] rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 active:scale-[0.98] text-xs font-medium transition-colors duration-150 disabled:opacity-40 disabled:pointer-events-none cursor-pointer select-none;
   }
 
   /* 5. Danger: Destructive actions (Delete, Clear) */
   .btn-danger {
-    @apply inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 min-h-[32px] rounded-xl bg-red-600 hover:bg-red-500 active:scale-[0.98] text-white text-xs font-semibold shadow-sm transition-all duration-150 disabled:opacity-40 disabled:pointer-events-none cursor-pointer;
+    @apply inline-flex items-center justify-center gap-1.5 px-3.5 py-2 min-h-[40px] sm:min-h-[34px] rounded-xl bg-red-600 hover:bg-red-500 active:scale-[0.98] text-white text-xs font-semibold shadow-sm transition-all duration-150 disabled:opacity-40 disabled:pointer-events-none cursor-pointer select-none;
   }
+}
+
+/* Safe area padding utilities for mobile devices */
+.safe-bottom {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+}
+.safe-top {
+  padding-top: max(0.75rem, env(safe-area-inset-top, 0px));
 }
 
 /* Universal Accessible Range Slider Thumbs & Tracks */

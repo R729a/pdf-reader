@@ -460,7 +460,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                   </div>
                 )}
 
-                <div className={`max-w-[85%] flex flex-col ${isUser ? 'items-end' : 'items-start'}`}>
+                <div className={`max-w-[92%] sm:max-w-[85%] flex flex-col ${isUser ? 'items-end' : 'items-start'}`}>
                   <div className="flex items-center gap-1.5 mb-1 px-1 text-[10px] text-slate-500">
                     <span className="font-semibold text-slate-400">
                       {isUser ? 'You' : 'Gemini AI Assistant'}
@@ -473,7 +473,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
 
                   {/* Message Bubble */}
                   <div
-                    className={`p-3.5 rounded-2xl shadow-sm relative ${
+                    className={`p-3 sm:p-3.5 rounded-2xl shadow-sm relative break-words [overflow-wrap:anywhere] ${
                       isUser
                         ? 'bg-slate-800/80 text-slate-200 border border-slate-700/70 rounded-tr-none whitespace-pre-wrap leading-relaxed'
                         : `bg-slate-800/90 text-slate-200 border rounded-tl-none ${
@@ -599,7 +599,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
       </div>
 
       {/* ChatGPT-Style Multiline Chat Input Field */}
-      <div className="p-3 sm:p-4 border-t border-slate-800 bg-slate-900/95 shrink-0">
+      <div className="p-2.5 sm:p-4 border-t border-slate-800 bg-slate-900/98 shrink-0 safe-bottom">
         <div className="relative bg-slate-950 border border-slate-800 focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500/50 rounded-2xl shadow-inner transition-all">
           <textarea
             ref={textareaRef}
@@ -615,8 +615,8 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
             onKeyDown={handleKeyDown}
             disabled={!document || isLoading}
             maxLength={4000}
-            className="w-full bg-transparent text-xs text-slate-100 placeholder-slate-500 pl-3.5 pr-20 py-3 resize-none focus:outline-none custom-scrollbar leading-relaxed disabled:opacity-50"
-            style={{ minHeight: '42px', maxHeight: '150px' }}
+            className="w-full bg-transparent text-xs text-slate-100 placeholder-slate-500 pl-3.5 pr-14 sm:pr-20 py-2.5 sm:py-3 resize-none focus:outline-none custom-scrollbar leading-relaxed disabled:opacity-50"
+            style={{ minHeight: '40px', maxHeight: '140px' }}
           />
 
           <div className="absolute right-2 bottom-2 flex items-center gap-1.5">
@@ -629,8 +629,9 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
               type="button"
               onClick={handleSendMessage}
               disabled={!inputQuery.trim() || isLoading || !document}
-              className="btn-primary !p-0 w-8 h-8 !rounded-xl shadow-md shadow-indigo-600/20"
-              title="Send message (Enter)"
+              className="btn-primary !p-0 w-9 h-9 sm:w-8 sm:h-8 !rounded-xl shadow-md shadow-indigo-600/20"
+              title="Send message"
+              aria-label="Send message"
             >
               {isLoading ? (
                 <Loader2 className="w-3.5 h-3.5 animate-spin text-white" />
@@ -641,7 +642,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center justify-between mt-1.5 px-1 text-[10px] text-slate-500">
+        <div className="flex items-center justify-between mt-1 px-1 text-[10px] text-slate-500">
           <span className="hidden sm:inline">
             Press <kbd className="font-mono bg-slate-800 px-1 py-0.5 rounded text-slate-400">Enter</kbd> to send, <kbd className="font-mono bg-slate-800 px-1 py-0.5 rounded text-slate-400">Shift + Enter</kbd> for newline
           </span>
