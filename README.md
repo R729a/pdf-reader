@@ -2,6 +2,7 @@
 
 <div align="center">
 
+[![Live Demo](https://img.shields.io/badge/Demo-readlistenodf.netlify.app-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://readlistenodf.netlify.app/)
 ![Next.js](https://img.shields.io/badge/Next.js-14.2.15-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
 ![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
@@ -11,9 +12,11 @@
 
 **An intelligent, privacy-first PDF reader combining Google Gemini AI chat, in-browser vector search, and a studio-grade Text-to-Speech (TTS) audiobook engine with real-time word-by-word visual synchronization.**
 
-[🚀 Quick Start](#-quick-start) • [✨ Key Features](#-key-features) • [🧠 Architecture](#-architecture) • [🎙️ Speech Synchronization](#️-real-time-word-synchronization) • [⌨️ Keyboard Shortcuts](#️-keyboard-shortcuts) • [♿ Accessibility](#-wcag-22-aa-accessibility)
+[🌐 Live Demo](https://readlistenodf.netlify.app/) • [🚀 Quick Start](#-quick-start) • [✨ Key Features](#-key-features) • [🧠 Architecture](#-architecture) • [🎙️ Speech Synchronization](#️-real-time-word-synchronization) • [⌨️ Keyboard Shortcuts](#️-keyboard-shortcuts) • [♿ Accessibility](#-wcag-22-aa-accessibility)
 
 </div>
+
+> 🚀 **Live Deployment:** Try the web app instantly without any local setup at [**https://readlistenodf.netlify.app/**](https://readlistenodf.netlify.app/)
 
 ---
 
@@ -92,6 +95,8 @@ sequenceDiagram
 
 ## 🚀 Quick Start
 
+> ⚡ **Try It Instantly:** Skip local installation and run the live app directly at [**readlistenodf.netlify.app**](https://readlistenodf.netlify.app/).
+
 <details open>
 <summary><b>Installation & Running Locally</b></summary>
 
@@ -101,8 +106,8 @@ sequenceDiagram
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/pdf-reader-ai.git
-cd pdf-reader-ai
+git clone https://github.com/R729a/pdf-reader.git
+cd pdf-reader
 ```
 
 ### 2. Install dependencies
@@ -222,5 +227,5 @@ This application complies with **WCAG 2.2 Level AA** standards:
 Distributed under the **MIT License**. See `LICENSE` for more information.
 
 <div align="center">
-  <sub>Built with ❤️ using Next.js 14, Google Gemini AI, and Web Speech API.</sub>
+  <sub>Built with ❤️ using Next.js 14, Google Gemini AI, and Web Speech API. Deployed live on <a href="https://readlistenodf.netlify.app/" target="_blank" rel="noopener noreferrer">Netlify</a>.</sub>
 </div>
